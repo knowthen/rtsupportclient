@@ -1,0 +1,66 @@
+.app{
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: 100vh;
+  font-size: 16px;
+}
+.nav{
+  flex-basis: 20%;
+}
+
+.messages-container{
+  flex-basis: 80%;
+  margin-bottom: 0;
+  height: 100vh;
+}
+.support, .users{
+  height: 50vh;
+  margin-bottom: 0;
+}
+.channels, .users, .messages{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.channels, .users{
+  height: 88%;
+}
+.messages{
+  height: 94%;
+}
+.channels > ul, .messages > ul, .users > ul{
+  flex: 1;
+  overflow-y: auto;
+}
+.message{
+  /*display: flex;*/
+}
+.message > .author{
+  flex-basis: 100%;
+}
+.message > .body{
+  flex-basis: 100%;
+}
+.active {
+  background-color: #E8E8E8;
+}
+.timestamp{
+  color: #808080;
+  font-style: italic;
+  padding-left: 10px;
+  font-size: 13px;
+}
+.form-group{
+  margin-bottom: 0;
+}
+ul{
+  list-style-type:none;
+  padding: 0;
+}
+li{
+  padding: 0 4px 0 4px;
+}
+a{
+  cursor: pointer;
+}
