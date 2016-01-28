@@ -16,7 +16,8 @@ class App extends Component{
     };
   }
   componentDidMount(){
-    let socket = this.socket = new Socket(new WebSocket('ws://localhost:4000')); 
+    let ws = new WebSocket('ws://localhost:4000')
+    let socket = this.socket = new Socket(ws); 
     socket.on('connect', this.onConnect.bind(this));
     socket.on('disconnect', this.onDisconnect.bind(this));
     socket.on('channel add', this.onAddChannel.bind(this));
@@ -72,7 +73,7 @@ class App extends Component{
     this.setState({activeChannel});
     this.socket.emit('message unsubscribe');
     this.setState({messages: []});
-    this.socket.emit('message subscribe', 
+    this.socket.emit('message subscribe',
       {channelId: activeChannel.id});
   }
   setUserName(name){
@@ -80,14 +81,14 @@ class App extends Component{
   }
   addMessage(body){
     let {activeChannel} = this.state;
-    this.socket.emit('message add', 
+    this.socket.emit('message add',
       {channelId: activeChannel.id, body});
   }
   render(){
     return (
       <div className='app'>
         <div className='nav'>
-          <ChannelSection 
+          <ChannelSection
             {...this.state}
             addChannel={this.addChannel.bind(this)}
             setChannel={this.setChannel.bind(this)}
@@ -103,7 +104,7 @@ class App extends Component{
       />
       </div>
 
-      
+
     )
   }
 }
