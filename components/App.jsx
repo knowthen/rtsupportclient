@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ChannelSection from './channels/ChannelSection.jsx';
 import UserSection from './users/UserSection.jsx';
 import MessageSection from './messages/MessageSection.jsx';
 import Socket from '../socket.js';
 
-class App extends Component{
-  constructor(props){
+class App extends Component {
+  constructor(props) {
     super(props);
     this.state = {
       channels: [],
@@ -15,9 +15,9 @@ class App extends Component{
       connected: false
     };
   }
-  componentDidMount(){
-    let ws = new WebSocket('ws://localhost:4000')
-    let socket = this.socket = new Socket(ws); 
+  componentDidMount() {
+    const ws = new WebSocket('ws://localhost:4000');
+    const socket = this.socket = new Socket(ws);
     socket.on('connect', this.onConnect.bind(this));
     socket.on('disconnect', this.onDisconnect.bind(this));
     socket.on('channel add', this.onAddChannel.bind(this));
@@ -26,87 +26,80 @@ class App extends Component{
     socket.on('user remove', this.onRemoveUser.bind(this));
     socket.on('message add', this.onMessageAdd.bind(this));
   }
-  onMessageAdd(message){
-    let {messages} = this.state;
+  onMessageAdd(message) {
+    const { messages } = this.state;
     messages.push(message);
-    this.setState({messages});
+    this.setState({ messages });
   }
-  onRemoveUser(removeUser){
-    let {users} = this.state;
-    users = users.filter(user => {
-      return user.id !== removeUser.id;
-    });
-    this.setState({users});
+  onRemoveUser(removeUser) {
+    let { users } = this.state;
+    users = users.filter(user => user.id !== removeUser.id);
+    this.setState({ users });
   }
-  onAddUser(user){
-    let {users} = this.state;
+  onAddUser(user) {
+    const { users } = this.state;
     users.push(user);
-    this.setState({users});
+    this.setState({ users });
   }
-  onEditUser(editUser){
-    let {users} = this.state;
+  onEditUser(editUser) {
+    let { users } = this.state;
     users = users.map(user => {
-      if(editUser.id === user.id){
+      if (editUser.id === user.id) {
         return editUser;
       }
       return user;
     });
-    this.setState({users});
+    this.setState({ users });
   }
-  onConnect(){
-    this.setState({connected: true});
+  onConnect() {
+    this.setState({ connected: true });
     this.socket.emit('channel subscribe');
     this.socket.emit('user subscribe');
   }
-  onDisconnect(){
-    this.setState({connected: false});
+  onDisconnect() {
+    this.setState({ connected: false });
   }
-  onAddChannel(channel){
-    let {channels} = this.state;
+  onAddChannel(channel) {
+    const { channels } = this.state;
     channels.push(channel);
-    this.setState({channels});
+    this.setState({ channels });
   }
-  addChannel(name){
-    this.socket.emit('channel add', {name});
-  }
-  setChannel(activeChannel){
-    this.setState({activeChannel});
+  setChannel(activeChannel) {
+    this.setState({ activeChannel });
     this.socket.emit('message unsubscribe');
-    this.setState({messages: []});
+    this.setState({ messages: [] });
     this.socket.emit('message subscribe',
-      {channelId: activeChannel.id});
+      { channelId: activeChannel.id });
   }
-  setUserName(name){
-    this.socket.emit('user edit', {name});
+  setUserName(name) {
+    this.socket.emit('user edit', { name });
   }
-  addMessage(body){
-    let {activeChannel} = this.state;
+  addChannel(name) {
+    this.socket.emit('channel add', { name });
+  }
+  addMessage(body) {
+    const { activeChannel } = this.state;
     this.socket.emit('message add',
-      {channelId: activeChannel.id, body});
+      { channelId: activeChannel.id, body });
   }
-  render(){
+  render() {
     return (
-      <div className='app'>
-        <div className='nav'>
-          <ChannelSection
-            {...this.state}
+      <div className="app">
+        <div className="nav">
+          <ChannelSection {...this.state}
             addChannel={this.addChannel.bind(this)}
             setChannel={this.setChannel.bind(this)}
           />
-          <UserSection
-            {...this.state}
+          <UserSection {...this.state}
             setUserName={this.setUserName.bind(this)}
           />
         </div>
-      <MessageSection
-        {...this.state}
-        addMessage={this.addMessage.bind(this)}
-      />
+        <MessageSection {...this.state}
+          addMessage={this.addMessage.bind(this)}
+        />
       </div>
-
-
-    )
+    );
   }
 }
 
-export default App
+export default App;
